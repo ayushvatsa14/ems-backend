@@ -45,14 +45,17 @@ exports.markCompleted=async(req, res) => {
         employeeData.taskCounts.completed=employeeData.taskCounts.completed + 1;
         await employeeData.save();
 
+        const updatedEmployeeData = await employee.findOne({ _id: employeeId }).populate('tasks');
+        updatedEmployeeData.password='';
+
         return res.status(200).json({
             success: true,
             message: "Task marked completed successfully",
-            data: employeeData
+            data: updatedEmployeeData
         });
     }
     catch(error){
-        console.log(error);
+        console.log(error.message);
         return res.status(500).json({
             success: false,
             message: error.message

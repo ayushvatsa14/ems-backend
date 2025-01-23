@@ -45,10 +45,13 @@ exports.markFailed=async(req, res) => {
         employeeData.taskCounts.failed=employeeData.taskCounts.failed + 1;
         await employeeData.save();
 
+        const updatedEmployeeData = await employee.findOne({ _id: employeeId }).populate('tasks');
+        updatedEmployeeData.password='';
+
         return res.status(200).json({
             success: true,
             message: "Task marked failed successfully",
-            data: employeeData
+            data: updatedEmployeeData
         });
     }
     catch(error){

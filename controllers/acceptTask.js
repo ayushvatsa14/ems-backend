@@ -45,10 +45,13 @@ exports.acceptTask=async(req, res) => {
         employeeData.taskCounts.active=employeeData.taskCounts.active + 1;
         await employeeData.save();
 
+        const updatedEmployeeData = await employee.findOne({ _id: employeeId }).populate('tasks');
+        updatedEmployeeData.password='';
+
         return res.status(200).json({
             success: true,
             message: "Task accepted successfully",
-            data: employeeData
+            data: updatedEmployeeData
         });
     }
     catch(error){
